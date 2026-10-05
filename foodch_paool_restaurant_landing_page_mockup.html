@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foodch Paool (फूडचं पाऊल) | Authentic Veg & Non-Veg in Marol, Mumbai</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Poppins, Mukta, Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@500;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tealGreen: '#1F514E',
+                        lavenderPurple: '#7862A5',
+                        walnutWood: '#6B3F2B',
+                        creamBg: '#F6F0E5',
+                        stoneGrey: '#8A8178',
+                        coralPink: '#D95F83',
+                        warmGold: '#E6A15C',
+                    },
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                        mukta: ['Mukta', 'sans-serif'],
+                        playfair: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F6F0E5;
+            color: #2C2C2C;
+            overflow-x: hidden;
+        }
+        
+        .marathi-text {
+            font-family: 'Mukta', sans-serif;
+        }
+
+        .heading-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F6F0E5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #7862A5;
+            border-radius: 4px;
+        }
+
+        /* Loader Animation */
+        #loader-screen {
+            position: fixed;
+            inset: 0;
+            background: #F6F0E5;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        /* Steam animation */
+        @keyframes riseSteam {
+            0% { transform: translateY(0) scaleX(1); opacity: 0; }
+            30% { opacity: 0.7; }
+            100% { transform: translateY(-40px) scaleX(1.8); opacity: 0; filter: blur(4px); }
+        }
+        .steam-particle {
+            animation: riseSteam 3s infinite ease-in-out;
+        }
+
+        /* Floating spice particles */
+        @keyframes floatSpice {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(180deg); }
+        }
+        .floating-spice {
+            animation: floatSpice 6s infinite ease-in-out;
+        }
+
+        /* Smartphone Shell Mockup Styles */
+        .mockup-container-outer {
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, rgba(120,98,165,0.15) 0%, rgba(31,81,78,0.2) 100%);
+            min-height: 100vh;
+        }
+
+        .phone-shell {
+            width: 410px;
+            max-width: 95vw;
+            height: 840px;
+            background: #0f172a;
+            border-radius: 48px;
+            box-shadow: 0 25px 65px -10px rgba(0, 0, 0, 0.5), 0 0 0 10px #262e3d, 0 0 0 12px #1e293b;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s ease;
+        }
+
+        /* Dynamic Island / Phone Notch */
+        .phone-notch-bar {
+            height: 34px;
+            background: #0f172a;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 600;
+            z-index: 50;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .dynamic-island {
+            width: 95px;
+            height: 18px;
+            background: #000;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+        }
+
+        .camera-lens {
+            width: 8px;
+            height: 8px;
+            background: #1e293b;
+            border-radius: 50%;
+            border: 1px solid #334155;
+        }
+
+        .phone-screen-content {
+            flex: 1;
+            overflow-y: auto;
+            background: #F6F0E5;
+            position: relative;
+            scroll-behavior: smooth;
+        }
+
+        .phone-home-indicator {
+            height: 16px;
+            background: #F6F0E5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            z-index: 50;
+        }
+
+        .home-bar {
+            width: 130px;
+            height: 4px;
+            background: #1F514E;
+            border-radius: 10px;
+            opacity: 0.6;
+        }
+
+        /* Mobile Mockup Overrides: Enforces responsive single-column layout inside 410px phone frame regardless of desktop screen width */
+        body.is-mobile-mockup .desktop-nav-links {
+            display: none !important;
+        }
+        body.is-mobile-mockup .mobile-hamburger-btn {
+            display: block !important;
+        }
+        body.is-mobile-mockup .grid-cols-1,
+        body.is-mobile-mockup .grid-cols-2,
+        body.is-mobile-mockup .md\:grid-cols-2,
+        body.is-mobile-mockup .md\:grid-cols-3,
+        body.is-mobile-mockup .md\:grid-cols-4,
+        body.is-mobile-mockup .lg\:grid-cols-3,
+        body.is-mobile-mockup .lg\:grid-cols-4,
+        body.is-mobile-mockup .lg\:grid-cols-12 {
+            grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+            gap: 1.25rem !important;
+        }
+        body.is-mobile-mockup .stats-grid-container {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 0.75rem !important;
+        }
+        body.is-mobile-mockup .lg\:col-span-7,
+        body.is-mobile-mockup .lg\:col-span-6,
+        body.is-mobile-mockup .lg\:col-span-5 {
+            grid-column: span 1 / span 1 !important;
+        }
+        body.is-mobile-mockup h1 {
+            font-size: 1.65rem !important;
+            line-height: 1.25 !important;
+        }
+        body.is-mobile-mockup h2 {
+            font-size: 1.4rem !important;
+            line-height: 1.3 !important;
+        }
+        body.is-mobile-mockup section {
+            padding-top: 2rem !important;
+            padding-bottom: 2rem !important;
+        }
+        body.is-mobile-mockup .hero-cta-buttons {
+            flex-direction: column !important;
+            width: 100% !important;
+        }
+        body.is-mobile-mockup .hero-cta-buttons a {
+            width: 100% !important;
+        }
+        body.is-mobile-mockup .menu-cat-container {
+            overflow-x: auto !important;
+            white-space: nowrap !important;
+            justify-content: flex-start !important;
+            padding-bottom: 4px !important;
+        }
+
+        /* Real mobile screen media query for phone frame adaptation */
+        @media (max-width: 500px) {
+            .mockup-container-outer {
+                padding: 0 !important;
+                background: none !important;
+                min-height: 100vh !important;
+            }
+            .phone-shell {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: 100vh !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            .phone-notch-bar {
+                padding: 0 16px !important;
+            }
+        }
+
+        /* Footprint pattern */
+        .footprint-bg {
+            background-image: radial-gradient(#1F514E 0.75px, transparent 0.75px);
+            background-size: 32px 32px;
+            opacity: 0.08;
+        }
+    </style>
+</head>
+<body class="bg-creamBg text-tealGreen relative">
+
+    <!-- Loader -->
+    <div id="loader-screen">
+        <div class="text-center">
+            <div class="w-24 h-24 mx-auto mb-6 bg-lavenderPurple text-white rounded-full flex items-center justify-center shadow-xl border-4 border-tealGreen animate-pulse">
+                <i class="fa-solid fa-shoe-prints text-3xl transform -rotate-45"></i>
+            </div>
+            <h1 class="heading-font text-3xl font-bold text-tealGreen mb-1">Foodch Paool</h1>
+            <p class="marathi-text text-xl text-walnutWood font-bold">फूडचं पाऊल · Marol, Mumbai</p>
+            <div class="flex justify-center space-x-3 mt-6">
+                <span class="w-3 h-3 bg-tealGreen rounded-full inline-block animate-bounce" style="animation-delay: 0.1s"></span>
+                <span class="w-3 h-3 bg-lavenderPurple rounded-full inline-block animate-bounce" style="animation-delay: 0.2s"></span>
+                <span class="w-3 h-3 bg-coralPink rounded-full inline-block animate-bounce" style="animation-delay: 0.3s"></span>
+            </div>
+            <p class="text-xs text-stoneGrey mt-4 tracking-wider uppercase font-semibold">Taking a delicious step...</p>
+        </div>
+    </div>
+
+    <!-- Floating View Mode Switcher Control Bar -->
+    <div class="fixed bottom-6 right-6 z-50 bg-tealGreen/95 backdrop-blur-md text-white px-4 py-2.5 rounded-full shadow-2xl flex items-center space-x-3 border-2 border-lavenderPurple/80 transition-all transform hover:scale-105">
+        <span class="text-xs font-bold tracking-wider uppercase hidden sm:inline text-creamBg">Display Mode:</span>
+        <div class="flex bg-walnutWood/90 rounded-full p-1 space-x-1 border border-creamBg/20">
+            <button onclick="switchView('desktop')" id="btn-desktop" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-coralPink text-white shadow">
+                <i class="fa-solid fa-desktop mr-1.5"></i> Desktop View
+            </button>
+            <button onclick="switchView('mobile')" id="btn-mobile" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition-all text-creamBg hover:text-white">
+                <i class="fa-solid fa-mobile-screen mr-1.5"></i> Mobile Mockup
+            </button>
+        </div>
+    </div>
+
+    <!-- Outer Presentation Wrapper (Changes container style when in Mobile Mockup mode) -->
+    <div id="display-mode-container" class="w-full transition-all duration-500">
+        
+        <!-- Phone Shell wrapper used ONLY when Mobile Mockup mode is active -->
+        <div id="phone-shell-wrapper" class="w-full">
+
+            <!-- Mobile Status Bar (Visible ONLY in Mobile Mockup mode) -->
+            <div id="phone-notch-bar" class="phone-notch-bar hidden">
+                <span>9:41</span>
+                <div class="dynamic-island">
+                    <div class="camera-lens"></div>
+                </div>
+                <div class="flex items-center space-x-1.5 text-xs">
+                    <i class="fa-solid fa-signal"></i>
+                    <i class="fa-solid fa-wifi"></i>
+                    <i class="fa-solid fa-battery-full"></i>
+                </div>
+            </div>
+
+            <!-- Scrollable Page Container -->
+            <div id="main-viewport-wrapper" class="w-full">
+
+                <!-- Navigation Bar -->
+                <nav class="sticky top-0 z-40 bg-tealGreen/95 backdrop-blur-md text-creamBg shadow-md border-b border-lavenderPurple/30 transition-all">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                        <!-- Logo with lavender purple circle badge -->
+                        <a href="#hero" class="flex items-center space-x-3 group">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-lavenderPurple flex items-center justify-center shadow-md border-2 border-creamBg transform group-hover:scale-105 transition-transform flex-shrink-0">
+                                <i class="fa-solid fa-shoe-prints text-creamBg text-base sm:text-lg transform -rotate-45"></i>
+                            </div>
+                            <div>
+                                <span class="heading-font text-lg sm:text-2xl font-bold tracking-tight text-white block leading-tight">Foodch Paool</span>
+                                <span class="marathi-text text-[10px] sm:text-xs text-coralPink font-bold tracking-widest block -mt-0.5">फूडचं पाऊल · मारोल</span>
+                            </div>
+                        </a>
+
+                        <!-- Desktop Navigation Links -->
+                        <div class="hidden md:flex items-center space-x-8 font-medium text-sm desktop-nav-links">
+                            <a href="#story" class="hover:text-coralPink transition-colors">Our Story</a>
+                            <a href="#signature" class="hover:text-coralPink transition-colors">Signature</a>
+                            <a href="#menu" class="hover:text-coralPink transition-colors">Full Menu</a>
+                            <a href="#catering" class="hover:text-coralPink transition-colors">Catering</a>
+                            <a href="#reviews" class="hover:text-coralPink transition-colors">Reviews</a>
+                            <a href="#contact" class="hover:text-coralPink transition-colors">Contact</a>
+                        </div>
+
+                        <!-- WhatsApp Order CTA & Mobile Menu Button -->
+                        <div class="flex items-center space-x-2.5">
+                            <button onclick="toggleCartDrawer()" class="relative bg-lavenderPurple hover:bg-lavenderPurple/90 text-white p-2.5 rounded-full font-semibold text-xs sm:text-sm shadow-md transition-transform active:scale-95">
+                                <i class="fa-solid fa-basket-shopping text-sm sm:text-base px-0.5"></i>
+                                <span id="cart-badge-count" class="hidden absolute -top-1 -right-1 bg-coralPink text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-tealGreen">0</span>
+                            </button>
+                            
+                            <a href="https://wa.me/919820098200?text=Hi%20Foodch%20Paool,%20I%20would%20like%20to%20order..." target="_blank" class="bg-coralPink hover:bg-coralPink/90 text-white px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full font-semibold text-xs sm:text-sm shadow-lg flex items-center space-x-2 transition-all transform hover:-translate-y-0.5">
+                                <i class="fa-brands fa-whatsapp text-sm sm:text-base"></i>
+                                <span class="hidden sm:inline">Order on WhatsApp</span>
+                            </a>
+
+                            <button onclick="toggleMobileMenu()" class="md:hidden text-creamBg p-2 focus:outline-none mobile-hamburger-btn">
+                                <i id="mobile-menu-icon" class="fa-solid fa-bars text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Dropdown Menu -->
+                    <div id="mobile-dropdown" class="hidden bg-tealGreen border-t border-lavenderPurple/30 px-6 py-4 space-y-3">
+                        <a href="#story" onclick="toggleMobileMenu()" class="block text-creamBg hover:text-coralPink font-medium py-1"><i class="fa-solid fa-book-open mr-2 text-coralPink"></i> Our Story</a>
+                        <a href="#signature" onclick="toggleMobileMenu()" class="block text-creamBg hover:text-coralPink font-medium py-1"><i class="fa-solid fa-star mr-2 text-coralPink"></i> Signature Dishes</a>
+                        <a href="#menu" onclick="toggleMobileMenu()" class="block text-creamBg hover:text-coralPink font-medium py-1"><i class="fa-solid fa-utensils mr-2 text-coralPink"></i> Full Menu</a>
+                        <a href="#catering" onclick="toggleMobileMenu()" class="block text-creamBg hover:text-coralPink font-medium py-1"><i class="fa-solid fa-bell-concierge mr-2 text-coralPink"></i> Catering Enquiry</a>
+                        <a href="#reviews" onclick="toggleMobileMenu()" class="block text-creamBg hover:text-coralPink font-medium py-1"><i class="fa-solid fa-comments mr-2 text-coralPink"></i> Guest Reviews</a>
+                        <a href="#contact" onclick="toggleMobileMenu()" class="block text-creamBg hover:text-coralPink font-medium py-1"><i class="fa-solid fa-location-dot mr-2 text-coralPink"></i> Contact & Location</a>
+                    </div>
+                </nav>
+
+                <!-- Hero Section -->
+                <section id="hero" class="relative bg-gradient-to-b from-tealGreen via-tealGreen/95 to-walnutWood text-creamBg py-12 sm:py-24 lg:py-28 overflow-hidden">
+                    <div class="absolute inset-0 footprint-bg pointer-events-none"></div>
+
+                    <!-- Floating spice decorative elements -->
+                    <div class="absolute top-12 left-10 text-coralPink/30 text-3xl floating-spice pointer-events-none hidden sm:block"><i class="fa-solid fa-pepper-hot"></i></div>
+                    <div class="absolute bottom-16 right-16 text-lavenderPurple/30 text-4xl floating-spice pointer-events-none hidden sm:block" style="animation-delay: 2s"><i class="fa-solid fa-seedling"></i></div>
+
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                            
+                            <!-- Left text column -->
+                            <div class="lg:col-span-7 space-y-5 text-center lg:text-left">
+                                <div class="inline-flex items-center space-x-2 bg-lavenderPurple/40 text-creamBg px-3.5 py-1 rounded-full border border-lavenderPurple/60 text-[11px] sm:text-xs font-semibold uppercase tracking-wider shadow-sm">
+                                    <span class="w-2 h-2 rounded-full bg-coralPink animate-ping"></span>
+                                    <span>Marol’s Premier Authentic Destination</span>
+                                </div>
+
+                                <h1 class="heading-font text-2xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white">
+                                    A Warm Welcome, <span class="text-coralPink italic">One Delicious Step</span> at a Time
+                                </h1>
+
+                                <div class="bg-walnutWood/70 border-l-4 border-coralPink p-3.5 sm:p-4 rounded-r-xl max-w-xl mx-auto lg:mx-0 shadow-lg backdrop-blur-sm">
+                                    <p class="marathi-text text-lg sm:text-2xl font-bold text-creamBg">चविष्ट जेवणाकडे तुमचं एक प्रेमळ पाऊल</p>
+                                    <p class="text-[10px] sm:text-xs text-creamBg/80 mt-0.5 uppercase tracking-wider font-medium">Authentic Veg & Non-Veg Delicacies in Marol, Andheri East, Mumbai</p>
+                                </div>
+
+                                <p class="text-creamBg/90 text-xs sm:text-lg max-w-xl mx-auto lg:mx-0 font-light leading-relaxed">
+                                    Step into a world of rich Maratha spices, succulent Mughlai kebabs, and aromatic coastal seafood cooked with love and heritage wood-fire warmth.
+                                </p>
+
+                                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4 pt-1 hero-cta-buttons">
+                                    <a href="#menu" class="w-full sm:w-auto bg-coralPink hover:bg-coralPink/90 text-white px-7 py-3 rounded-full font-bold shadow-xl flex items-center justify-center space-x-2.5 transition-transform transform hover:scale-105 text-xs sm:text-sm">
+                                        <i class="fa-solid fa-utensils"></i>
+                                        <span>Order & Explore Menu</span>
+                                    </a>
+                                    <a href="#catering" class="w-full sm:w-auto bg-transparent hover:bg-creamBg/10 text-creamBg border-2 border-creamBg/80 px-7 py-3 rounded-full font-semibold transition-all text-center text-xs sm:text-sm">
+                                        Book Catering
+                                    </a>
+                                </div>
+
+                                <div class="pt-3 flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-6 text-[11px] sm:text-xs text-creamBg/80">
+                                    <div class="flex items-center space-x-1.5">
+                                        <i class="fa-solid fa-shield-halved text-coralPink text-xs sm:text-sm"></i>
+                                        <span>100% Fresh & Authentic</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1.5">
+                                        <i class="fa-solid fa-motorcycle text-coralPink text-xs sm:text-sm"></i>
+                                        <span>Fast Delivery in Marol</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1.5">
+                                        <i class="fa-solid fa-store text-coralPink text-xs sm:text-sm"></i>
+                                        <span>Dine-In & Takeaway</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right visual column with steaming kebab platter -->
+                            <div class="lg:col-span-5 relative flex justify-center">
+                                <div class="relative w-full max-w-md">
+                                    <!-- Warm wood circular backdrop glow -->
+                                    <div class="absolute -inset-4 bg-walnutWood/80 rounded-full blur-2xl -z-10 opacity-70"></div>
+                                    
+                                    <!-- Main Image Card -->
+                                    <div class="relative bg-creamBg rounded-3xl p-3 sm:p-4 shadow-2xl border-4 border-lavenderPurple">
+                                        <div class="relative overflow-hidden rounded-2xl h-64 sm:h-88">
+                                            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1000&auto=format&fit=crop" alt="Steaming Kebab Platter Foodch Paool" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" onerror="this.src='https://images.unsplash.com/photo-1599487484170-7c1e6e5fa81d?q=80&w=800&auto=format&fit=crop'">
+                                            
+                                            <!-- Steam animation overlays -->
+                                            <div class="absolute top-1/3 left-1/4 w-8 h-20 bg-white/40 rounded-full steam-particle pointer-events-none"></div>
+                                            <div class="absolute top-1/4 left-1/2 w-10 h-24 bg-white/40 rounded-full steam-particle pointer-events-none" style="animation-delay: 1s;"></div>
+                                            <div class="absolute top-1/3 right-1/4 w-8 h-20 bg-white/40 rounded-full steam-particle pointer-events-none" style="animation-delay: 2s;"></div>
+
+                                            <!-- Floating badge -->
+                                            <div class="absolute bottom-2.5 left-2.5 right-2.5 bg-tealGreen/95 backdrop-blur-md text-creamBg p-2.5 rounded-xl border border-lavenderPurple flex items-center justify-between shadow-lg">
+                                                <div class="flex items-center space-x-2.5">
+                                                    <div class="w-8 h-8 rounded-full bg-coralPink flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+                                                        <i class="fa-solid fa-fire"></i>
+                                                    </div>
+                                                    <div class="truncate">
+                                                        <p class="text-[11px] font-bold text-white truncate">Chef's Special Kebab Platter</p>
+                                                        <p class="text-[9px] text-creamBg/80">Charcoal Smoked & Marinated</p>
+                                                    </div>
+                                                </div>
+                                                <span class="text-coralPink font-bold text-xs sm:text-sm ml-1 flex-shrink-0">₹549/-</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Stats Bar -->
+                <section class="bg-white border-b border-stoneGrey/20 py-5">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 text-center stats-grid-container">
+                            <div class="p-3 bg-creamBg/60 rounded-2xl shadow-sm border border-tealGreen/10">
+                                <span class="block heading-font text-xl sm:text-3xl font-bold text-tealGreen">8+</span>
+                                <span class="text-[10px] sm:text-[11px] text-stoneGrey uppercase tracking-wider font-semibold">Years Serving Marol</span>
+                            </div>
+                            <div class="p-3 bg-creamBg/60 rounded-2xl shadow-sm border border-tealGreen/10">
+                                <span class="block heading-font text-xl sm:text-3xl font-bold text-lavenderPurple">50+</span>
+                                <span class="text-[10px] sm:text-[11px] text-stoneGrey uppercase tracking-wider font-semibold">Signature Dishes</span>
+                            </div>
+                            <div class="p-3 bg-creamBg/60 rounded-2xl shadow-sm border border-tealGreen/10">
+                                <span class="block heading-font text-xl sm:text-3xl font-bold text-coralPink">25,000+</span>
+                                <span class="text-[10px] sm:text-[11px] text-stoneGrey uppercase tracking-wider font-semibold">Happy Foodies</span>
+                            </div>
+                            <div class="p-3 bg-creamBg/60 rounded-2xl shadow-sm border border-tealGreen/10">
+                                <span class="block heading-font text-xl sm:text-3xl font-bold text-walnutWood">4.8 <i class="fa-solid fa-star text-amber-500 text-xs sm:text-base"></i></span>
+                                <span class="text-[10px] sm:text-[11px] text-stoneGrey uppercase tracking-wider font-semibold">Google Rating</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Brand Story Section -->
+                <section id="story" class="py-12 sm:py-20 bg-creamBg relative">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                            
+                            <!-- Left Facade Visual representation -->
+                            <div class="lg:col-span-6 relative">
+                                <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-walnutWood">
+                                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1000&auto=format&fit=crop" alt="Foodch Paool Restaurant Facade" class="w-full h-64 sm:h-96 object-cover" onerror="this.src='https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop'">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-tealGreen/95 via-tealGreen/30 to-transparent flex flex-col justify-end p-5 text-creamBg">
+                                        <span class="marathi-text text-coralPink text-xs sm:text-lg font-bold">आमच्याबद्दल (About Us)</span>
+                                        <p class="heading-font text-base sm:text-2xl font-bold text-white">Warm Walnut Fascia & Lavender Signage in Marol</p>
+                                    </div>
+                                </div>
+                                <!-- Floating bougainvillea accent badge -->
+                                <div class="absolute -bottom-4 -right-2 sm:-right-5 bg-coralPink text-white px-4 py-2 rounded-2xl shadow-xl border-2 border-creamBg hidden sm:block">
+                                    <p class="text-[9px] font-bold uppercase tracking-wider">Located in Heart of</p>
+                                    <p class="heading-font text-xs sm:text-base font-bold">Andheri East, Mumbai</p>
+                                </div>
+                            </div>
+
+                            <!-- Right Story Content -->
+                            <div class="lg:col-span-6 space-y-4">
+                                <div class="inline-flex items-center space-x-2 text-lavenderPurple font-bold text-[11px] uppercase tracking-widest bg-lavenderPurple/15 px-3 py-1 rounded-full border border-lavenderPurple/20">
+                                    <i class="fa-solid fa-shoe-prints"></i>
+                                    <span>The Journey of Footsteps</span>
+                                </div>
+
+                                <h2 class="heading-font text-xl sm:text-4xl font-bold text-tealGreen leading-tight">
+                                    Every Footstep Leads to Authentic Flavor & Family Warmth
+                                </h2>
+
+                                <p class="text-stoneGrey text-xs sm:text-sm leading-relaxed">
+                                    Founded in the vibrant lanes of Marol, Andheri East, <strong class="text-tealGreen">Foodch Paool (फूडचं पाऊल)</strong> was born out of a simple passion: to bring families together over recipes steeped in Maharashtrian heritage and Mughlai culinary excellence.
+                                </p>
+
+                                <p class="text-stoneGrey text-xs sm:text-sm leading-relaxed">
+                                    Our real-world visual identity reflects our roots—warm walnut wood fascia that welcomes you like home, deep teal-green Marathi signage, our signature lavender-purple circular badge, and subtle pink bougainvillea aesthetics that make every dining experience feel like a celebratory feast.
+                                </p>
+
+                                <div class="grid grid-cols-2 gap-3 pt-1">
+                                    <div class="flex items-start space-x-2.5 bg-white p-2.5 rounded-xl border border-tealGreen/10">
+                                        <div class="w-6 h-6 rounded-full bg-tealGreen text-creamBg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <i class="fa-solid fa-check text-[10px]"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-tealGreen text-[11px] sm:text-xs">Secret Spices</h4>
+                                            <p class="text-[9px] sm:text-[10px] text-stoneGrey">Hand-ground authentic masalas</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-2.5 bg-white p-2.5 rounded-xl border border-tealGreen/10">
+                                        <div class="w-6 h-6 rounded-full bg-tealGreen text-creamBg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <i class="fa-solid fa-check text-[10px]"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-tealGreen text-[11px] sm:text-xs">Family Recipes</h4>
+                                            <p class="text-[9px] sm:text-[10px] text-stoneGrey">Passed down through generations</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="pt-2">
+                                    <a href="#menu" class="inline-flex items-center space-x-2 bg-walnutWood hover:bg-walnutWood/90 text-creamBg px-5 py-2.5 rounded-full font-semibold text-xs shadow-lg transition-transform transform hover:scale-105">
+                                        <span>Discover Our Menu</span>
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Signature Dishes Section -->
+                <section id="signature" class="py-12 sm:py-20 bg-white border-t border-stoneGrey/20">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-16">
+                            <span class="marathi-text text-coralPink font-bold text-base sm:text-lg">खास आकर्षण (Specialties)</span>
+                            <h2 class="heading-font text-2xl sm:text-4xl font-bold text-tealGreen mt-1">Signature Masterpieces</h2>
+                            <p class="text-stoneGrey text-xs sm:text-sm mt-1.5">Handcrafted with premium ingredients, secret spice blends, and cooked to perfection.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8">
+                            
+                            <!-- Dish 1 -->
+                            <div class="bg-creamBg rounded-3xl p-4 border-2 border-tealGreen/20 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group flex flex-col justify-between">
+                                <div>
+                                    <div class="relative h-40 sm:h-44 rounded-2xl overflow-hidden mb-3">
+                                        <img src="https://images.unsplash.com/photo-1599487484170-7c1e6e5fa81d?q=80&w=600&auto=format&fit=crop" alt="Murgh Malai Kebab" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/7862A5/F6F0E5?text=Murgh+Malai+Kebab'">
+                                        <span class="absolute top-2.5 left-2.5 bg-rose-700 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow">Non-Veg</span>
+                                        <span class="absolute bottom-2.5 right-2.5 bg-tealGreen text-creamBg text-xs font-bold px-2 py-0.5 rounded-lg shadow">₹380</span>
+                                    </div>
+                                    <h3 class="heading-font text-base sm:text-lg font-bold text-tealGreen">Murgh Malai Kebab</h3>
+                                    <p class="text-stoneGrey text-xs mt-1 leading-relaxed">Juicy tender chicken chunks marinated in cream, cheese, cardamom, and white pepper, charred in clay oven.</p>
+                                </div>
+                                <div class="mt-3 pt-3 border-t border-tealGreen/10 flex items-center justify-between">
+                                    <span class="text-[10px] text-walnutWood font-semibold"><i class="fa-solid fa-fire text-coralPink mr-1"></i> Charcoal</span>
+                                    <button onclick="addToCart(1)" class="bg-coralPink hover:bg-coralPink/90 text-white text-xs px-3 py-1.5 rounded-xl font-bold shadow transition-transform transform active:scale-95">
+                                        Add +
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Dish 2 -->
+                            <div class="bg-creamBg rounded-3xl p-4 border-2 border-tealGreen/20 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group flex flex-col justify-between">
+                                <div>
+                                    <div class="relative h-40 sm:h-44 rounded-2xl overflow-hidden mb-3">
+                                        <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=600&auto=format&fit=crop" alt="Dum Chicken Biryani" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/7862A5/F6F0E5?text=Dum+Biryani'">
+                                        <span class="absolute top-2.5 left-2.5 bg-rose-700 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow">Non-Veg</span>
+                                        <span class="absolute bottom-2.5 right-2.5 bg-tealGreen text-creamBg text-xs font-bold px-2 py-0.5 rounded-lg shadow">₹340</span>
+                                    </div>
+                                    <h3 class="heading-font text-base sm:text-lg font-bold text-tealGreen">Paool Special Dum Biryani</h3>
+                                    <p class="text-stoneGrey text-xs mt-1 leading-relaxed">Long-grain basmati rice layered with tender chicken, saffron, mint, and sealed with dough in authentic dum style.</p>
+                                </div>
+                                <div class="mt-3 pt-3 border-t border-tealGreen/10 flex items-center justify-between">
+                                    <span class="text-[10px] text-walnutWood font-semibold"><i class="fa-solid fa-pepper-hot text-coralPink mr-1"></i> Chef Special</span>
+                                    <button onclick="addToCart(8)" class="bg-coralPink hover:bg-coralPink/90 text-white text-xs px-3 py-1.5 rounded-xl font-bold shadow transition-transform transform active:scale-95">
+                                        Add +
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Dish 3 -->
+                            <div class="bg-creamBg rounded-3xl p-4 border-2 border-tealGreen/20 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group flex flex-col justify-between">
+                                <div>
+                                    <div class="relative h-40 sm:h-44 rounded-2xl overflow-hidden mb-3">
+                                        <img src="https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?q=80&w=600&auto=format&fit=crop" alt="Classic Butter Chicken" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/7862A5/F6F0E5?text=Butter+Chicken'">
+                                        <span class="absolute top-2.5 left-2.5 bg-rose-700 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow">Non-Veg</span>
+                                        <span class="absolute bottom-2.5 right-2.5 bg-tealGreen text-creamBg text-xs font-bold px-2 py-0.5 rounded-lg shadow">₹390</span>
+                                    </div>
+                                    <h3 class="heading-font text-base sm:text-lg font-bold text-tealGreen">Classic Butter Chicken</h3>
+                                    <p class="text-stoneGrey text-xs mt-1 leading-relaxed">Tandoori chicken pieces simmered in a rich, velvety tomato and butter gravy infused with kasuri methi.</p>
+                                </div>
+                                <div class="mt-3 pt-3 border-t border-tealGreen/10 flex items-center justify-between">
+                                    <span class="text-[10px] text-walnutWood font-semibold"><i class="fa-solid fa-heart text-coralPink mr-1"></i> Favorite</span>
+                                    <button onclick="addToCart(6)" class="bg-coralPink hover:bg-coralPink/90 text-white text-xs px-3 py-1.5 rounded-xl font-bold shadow transition-transform transform active:scale-95">
+                                        Add +
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Dish 4 -->
+                            <div class="bg-creamBg rounded-3xl p-4 border-2 border-tealGreen/20 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group flex flex-col justify-between">
+                                <div>
+                                    <div class="relative h-40 sm:h-44 rounded-2xl overflow-hidden mb-3">
+                                        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=600&auto=format&fit=crop" alt="Paneer Tikka Lababdar" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/7862A5/F6F0E5?text=Paneer+Tikka'">
+                                        <span class="absolute top-2.5 left-2.5 bg-emerald-700 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow">Pure Veg</span>
+                                        <span class="absolute bottom-2.5 right-2.5 bg-tealGreen text-creamBg text-xs font-bold px-2 py-0.5 rounded-lg shadow">₹310</span>
+                                    </div>
+                                    <h3 class="heading-font text-base sm:text-lg font-bold text-tealGreen">Paneer Tikka Lababdar</h3>
+                                    <p class="text-stoneGrey text-xs mt-1 leading-relaxed">Fresh cottage cheese cubes grilled in tandoor, tossed in a rich onion-tomato gravy with bell peppers and spices.</p>
+                                </div>
+                                <div class="mt-3 pt-3 border-t border-tealGreen/10 flex items-center justify-between">
+                                    <span class="text-[10px] text-walnutWood font-semibold"><i class="fa-solid fa-leaf text-emerald-600 mr-1"></i> Veg Choice</span>
+                                    <button onclick="addToCart(7)" class="bg-coralPink hover:bg-coralPink/90 text-white text-xs px-3 py-1.5 rounded-xl font-bold shadow transition-transform transform active:scale-95">
+                                        Add +
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Full Interactive Menu Section with Live Search & Tray Builder -->
+                <section id="menu" class="py-12 sm:py-20 bg-creamBg relative">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+                            <span class="marathi-text text-coralPink font-bold text-base sm:text-lg">संपूर्ण मेनू (Our Menu)</span>
+                            <h2 class="heading-font text-2xl sm:text-4xl font-bold text-tealGreen mt-1">Explore Our Full Menu</h2>
+                            <p class="text-stoneGrey text-xs sm:text-sm mt-1.5">Filter by dietary preference, search by dish name, or choose a category.</p>
+                        </div>
+
+                        <!-- Menu Controls (Live Search, Dietary Filter & Category Tabs) -->
+                        <div class="bg-white p-4 sm:p-5 rounded-3xl shadow-md mb-8 border border-tealGreen/15 space-y-3.5">
+                            
+                            <!-- Search Bar & Dietary Filter Row -->
+                            <div class="flex flex-col md:flex-row items-center justify-between gap-3">
+                                <!-- Search Input -->
+                                <div class="relative w-full md:w-96">
+                                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stoneGrey text-xs"></i>
+                                    <input type="text" id="menu-search-input" oninput="handleSearchInput(event)" placeholder="Search dishes (e.g. Biryani, Kebab, Paneer)..." class="w-full pl-9 pr-3.5 py-2 rounded-2xl border border-tealGreen/20 bg-creamBg/50 text-xs focus:outline-none focus:border-tealGreen text-tealGreen font-medium">
+                                </div>
+
+                                <!-- Veg / Non-Veg Switcher -->
+                                <div class="flex items-center space-x-1 bg-creamBg p-1 rounded-2xl border border-tealGreen/20 w-full sm:w-auto justify-center">
+                                    <button onclick="filterDiet('all')" id="filter-all" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-tealGreen text-creamBg shadow">All</button>
+                                    <button onclick="filterDiet('veg')" id="filter-veg" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-stoneGrey hover:text-tealGreen"><i class="fa-solid fa-circle text-emerald-600 mr-1 text-[8px]"></i> Veg</button>
+                                    <button onclick="filterDiet('nonveg')" id="filter-nonveg" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-stoneGrey hover:text-tealGreen"><i class="fa-solid fa-circle text-rose-600 mr-1 text-[8px]"></i> Non-Veg</button>
+                                </div>
+                            </div>
+
+                            <!-- Category Tabs -->
+                            <div class="flex flex-wrap justify-center gap-1.5 pt-2 border-t border-tealGreen/10 menu-cat-container">
+                                <button onclick="filterCategory('starters')" id="cat-starters" class="menu-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-lavenderPurple text-white shadow">Starters</button>
+                                <button onclick="filterCategory('kebabs')" id="cat-kebabs" class="menu-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-creamBg text-tealGreen hover:bg-tealGreen/10">Kebabs</button>
+                                <button onclick="filterCategory('mughlai')" id="cat-mughlai" class="menu-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-creamBg text-tealGreen hover:bg-tealGreen/10">Mughlai</button>
+                                <button onclick="filterCategory('seafood')" id="cat-seafood" class="menu-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-creamBg text-tealGreen hover:bg-tealGreen/10">Seafood</button>
+                                <button onclick="filterCategory('breads')" id="cat-breads" class="menu-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-creamBg text-tealGreen hover:bg-tealGreen/10">Breads</button>
+                                <button onclick="filterCategory('desserts')" id="cat-desserts" class="menu-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-creamBg text-tealGreen hover:bg-tealGreen/10">Desserts</button>
+                            </div>
+                        </div>
+
+                        <!-- Menu Items Grid -->
+                        <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                            <!-- Populated dynamically via JavaScript -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Catering Section with Interactive Calculator -->
+                <section id="catering" class="py-12 sm:py-20 bg-walnutWood text-creamBg relative overflow-hidden">
+                    <div class="absolute inset-0 footprint-bg opacity-10 pointer-events-none"></div>
+                    
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                            
+                            <div class="lg:col-span-6 space-y-4">
+                                <span class="marathi-text text-coralPink text-base sm:text-lg font-bold">पार्टी आणि केटरिंग (Catering)</span>
+                                <h2 class="heading-font text-2xl sm:text-4xl font-bold text-white leading-tight">
+                                    Make Your Celebrations Unforgettable with Foodch Paool
+                                </h2>
+                                <p class="text-creamBg/90 text-xs sm:text-sm leading-relaxed">
+                                    From intimate family get-togethers in Marol to large corporate events across Andheri East, we bring live kebab counters, authentic curries, and warm hospitality to your venue.
+                                </p>
+                                
+                                <!-- Interactive Pricing Estimator Card -->
+                                <div class="bg-tealGreen/70 backdrop-blur-md border border-creamBg/20 p-4 rounded-2xl space-y-2.5">
+                                    <div class="flex justify-between items-center text-xs font-bold text-creamBg">
+                                        <span><i class="fa-solid fa-calculator text-coralPink mr-1"></i> Guest Count Estimator:</span>
+                                        <span id="guest-count-label" class="text-coralPink text-xs sm:text-sm font-extrabold">50 Guests</span>
+                                    </div>
+                                    <input type="range" id="guest-range" min="20" max="300" step="10" value="50" oninput="updateCateringEstimate(this.value)" class="w-full accent-coralPink h-2 bg-creamBg/30 rounded-lg cursor-pointer">
+                                    
+                                    <div class="pt-2 flex items-center justify-between border-t border-creamBg/10 text-xs">
+                                        <span class="text-creamBg/80">Est. Starting Package:</span>
+                                        <span id="estimated-cost-label" class="text-white font-bold text-sm sm:text-base">₹17,500 <span class="text-[10px] font-normal text-creamBg/70">(~₹350/head)</span></span>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-2 pt-1">
+                                    <div class="flex items-center space-x-2.5">
+                                        <div class="w-6 h-6 rounded-full bg-lavenderPurple flex items-center justify-center text-white text-[10px] flex-shrink-0"><i class="fa-solid fa-utensils"></i></div>
+                                        <span class="text-xs font-medium">Customized Veg & Non-Veg Menus</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2.5">
+                                        <div class="w-6 h-6 rounded-full bg-lavenderPurple flex items-center justify-center text-white text-[10px] flex-shrink-0"><i class="fa-solid fa-fire-burner"></i></div>
+                                        <span class="text-xs font-medium">Live Tandoor & Grill Counter Options</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Enquiry Form Card -->
+                            <div class="lg:col-span-6">
+                                <div class="bg-creamBg text-tealGreen p-5 sm:p-8 rounded-3xl shadow-2xl border-4 border-lavenderPurple">
+                                    <h3 class="heading-font text-lg sm:text-2xl font-bold text-tealGreen mb-1">Book Catering Inquiry</h3>
+                                    <p class="text-xs text-stoneGrey mb-4">Fill in your details and our event manager in Marol will connect with you.</p>
+                                    
+                                    <form onsubmit="handleCateringSubmit(event)" class="space-y-3">
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-tealGreen uppercase tracking-wider mb-1">Your Name</label>
+                                            <input type="text" required placeholder="e.g. Rahul Deshmukh" class="w-full px-3 py-2 rounded-xl border border-tealGreen/20 bg-white text-xs focus:outline-none focus:border-coralPink">
+                                        </div>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div>
+                                                <label class="block text-[10px] font-bold text-tealGreen uppercase tracking-wider mb-1">Phone Number</label>
+                                                <input type="tel" required placeholder="98200XXXXX" class="w-full px-3 py-2 rounded-xl border border-tealGreen/20 bg-white text-xs focus:outline-none focus:border-coralPink">
+                                            </div>
+                                            <div>
+                                                <label class="block text-[10px] font-bold text-tealGreen uppercase tracking-wider mb-1">Event Type</label>
+                                                <select class="w-full px-3 py-2 rounded-xl border border-tealGreen/20 bg-white text-xs focus:outline-none focus:border-coralPink">
+                                                    <option>Family Gathering / Birthday</option>
+                                                    <option>Corporate Event</option>
+                                                    <option>Wedding / Reception</option>
+                                                    <option>Other Celebration</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-tealGreen uppercase tracking-wider mb-1">Preferred Date & Venue Location</label>
+                                            <input type="text" required placeholder="e.g. 25th Nov in Marol, Andheri East" class="w-full px-3 py-2 rounded-xl border border-tealGreen/20 bg-white text-xs focus:outline-none focus:border-coralPink">
+                                        </div>
+                                        <button type="submit" class="w-full bg-coralPink hover:bg-coralPink/90 text-white py-2.5 rounded-xl font-bold text-xs shadow-lg transition-transform transform active:scale-95">
+                                            Submit Catering Enquiry
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Testimonials Section -->
+                <section id="reviews" class="py-12 sm:py-20 bg-white">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-16">
+                            <span class="marathi-text text-coralPink font-bold text-base sm:text-lg">ग्राहकांचे अभिप्राय (Reviews)</span>
+                            <h2 class="heading-font text-2xl sm:text-4xl font-bold text-tealGreen mt-1">Loved by Foodies Across Mumbai</h2>
+                            <p class="text-stoneGrey text-xs sm:text-sm mt-1.5">Read what our regular patrons from Marol and Andheri East have to say.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-8">
+                            
+                            <!-- Review 1 -->
+                            <div class="bg-creamBg p-5 rounded-3xl border border-tealGreen/15 shadow-lg relative flex flex-col justify-between">
+                                <div class="absolute top-3 right-5 text-lavenderPurple/30 text-4xl font-serif">“</div>
+                                <div>
+                                    <div class="flex items-center space-x-1 text-amber-500 mb-3 text-xs">
+                                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                    </div>
+                                    <p class="text-stoneGrey text-xs leading-relaxed italic mb-5">
+                                        "The Murgh Malai Kebab and Dum Biryani at Foodch Paool are unbeatable! Being a resident of Marol, this is my go-to place for authentic weekend dinners."
+                                    </p>
+                                </div>
+                                <div class="flex items-center space-x-3 pt-3 border-t border-tealGreen/10">
+                                    <div class="w-8 h-8 rounded-full bg-tealGreen text-white flex items-center justify-center font-bold text-[11px] flex-shrink-0">
+                                        AS
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-tealGreen text-xs">Amit Sawant</h4>
+                                        <p class="text-[9px] text-stoneGrey">Local Resident, Marol</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Review 2 -->
+                            <div class="bg-creamBg p-5 rounded-3xl border border-tealGreen/15 shadow-lg relative flex flex-col justify-between">
+                                <div class="absolute top-3 right-5 text-lavenderPurple/30 text-4xl font-serif">“</div>
+                                <div>
+                                    <div class="flex items-center space-x-1 text-amber-500 mb-3 text-xs">
+                                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                    </div>
+                                    <p class="text-stoneGrey text-xs leading-relaxed italic mb-5">
+                                        "Such a warm, inviting ambiance! The walnut wood decor and lavender sign give it such a cozy Maharashtrian touch. The seafood platter is a must-try."
+                                    </p>
+                                </div>
+                                <div class="flex items-center space-x-3 pt-3 border-t border-tealGreen/10">
+                                    <div class="w-8 h-8 rounded-full bg-lavenderPurple text-white flex items-center justify-center font-bold text-[11px] flex-shrink-0">
+                                        PJ
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-tealGreen text-xs">Priya Joshi</h4>
+                                        <p class="text-[9px] text-stoneGrey">Food Blogger, Mumbai</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Review 3 -->
+                            <div class="bg-creamBg p-5 rounded-3xl border border-tealGreen/15 shadow-lg relative flex flex-col justify-between">
+                                <div class="absolute top-3 right-5 text-lavenderPurple/30 text-4xl font-serif">“</div>
+                                <div>
+                                    <div class="flex items-center space-x-1 text-amber-500 mb-3 text-xs">
+                                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                    </div>
+                                    <p class="text-stoneGrey text-xs leading-relaxed italic mb-5">
+                                        "We ordered catering from Foodch Paool for our office party in Andheri East. The food arrived piping hot, delicious, and everyone praised the kebabs!"
+                                    </p>
+                                </div>
+                                <div class="flex items-center space-x-3 pt-3 border-t border-tealGreen/10">
+                                    <div class="w-8 h-8 rounded-full bg-walnutWood text-white flex items-center justify-center font-bold text-[11px] flex-shrink-0">
+                                        RK
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-tealGreen text-xs">Rohit Kulkarni</h4>
+                                        <p class="text-[9px] text-stoneGrey">Corporate Professional</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Instagram Social Grid -->
+                <section class="py-12 sm:py-20 bg-creamBg border-t border-stoneGrey/20">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="flex flex-col md:flex-row items-center justify-between mb-8">
+                            <div>
+                                <span class="marathi-text text-coralPink font-bold text-base sm:text-lg">इन्स्टाग्राम क्षण (Social)</span>
+                                <h2 class="heading-font text-xl sm:text-3xl font-bold text-tealGreen mt-0.5">Follow @FoodchPaool on Instagram</h2>
+                            </div>
+                            <a href="https://instagram.com" target="_blank" class="mt-3 md:mt-0 bg-gradient-to-r from-purple-600 via-pink-600 to-amber-500 text-white px-5 py-2 rounded-full font-bold text-xs shadow-lg flex items-center space-x-2">
+                                <i class="fa-brands fa-instagram text-sm"></i>
+                                <span>Follow Us</span>
+                            </a>
+                        </div>
+
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+                            <div class="relative rounded-2xl overflow-hidden group h-48 sm:h-64 shadow-md">
+                                <img src="https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?q=80&w=500&auto=format&fit=crop" alt="Reel 1" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=500&auto=format&fit=crop'">
+                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <div class="w-9 h-9 rounded-full bg-coralPink text-white flex items-center justify-center shadow-lg">
+                                        <i class="fa-solid fa-play ml-0.5 text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="relative rounded-2xl overflow-hidden group h-48 sm:h-64 shadow-md">
+                                <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=500&auto=format&fit=crop" alt="Reel 2" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=500&auto=format&fit=crop'">
+                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <div class="w-9 h-9 rounded-full bg-coralPink text-white flex items-center justify-center shadow-lg">
+                                        <i class="fa-solid fa-play ml-0.5 text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="relative rounded-2xl overflow-hidden group h-48 sm:h-64 shadow-md">
+                                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=500&auto=format&fit=crop" alt="Reel 3" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?q=80&w=500&auto=format&fit=crop'">
+                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <div class="w-9 h-9 rounded-full bg-coralPink text-white flex items-center justify-center shadow-lg">
+                                        <i class="fa-solid fa-play ml-0.5 text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="relative rounded-2xl overflow-hidden group h-48 sm:h-64 shadow-md">
+                                <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=500&auto=format&fit=crop" alt="Reel 4" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=500&auto=format&fit=crop'">
+                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <div class="w-9 h-9 rounded-full bg-coralPink text-white flex items-center justify-center shadow-lg">
+                                        <i class="fa-solid fa-play ml-0.5 text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Footer -->
+                <footer id="contact" class="bg-tealGreen text-creamBg pt-12 pb-10 border-t-4 border-lavenderPurple">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+                            
+                            <!-- Col 1: Brand Info -->
+                            <div class="space-y-2.5">
+                                <div class="flex items-center space-x-2.5">
+                                    <div class="w-8 h-8 rounded-full bg-lavenderPurple flex items-center justify-center text-creamBg shadow-md">
+                                        <i class="fa-solid fa-shoe-prints text-xs transform -rotate-45"></i>
+                                    </div>
+                                    <div>
+                                        <span class="heading-font text-base font-bold text-white block">Foodch Paool</span>
+                                        <span class="marathi-text text-[10px] text-coralPink font-bold">फूडचं पाऊल</span>
+                                    </div>
+                                </div>
+                                <p class="text-creamBg/80 text-xs leading-relaxed">
+                                    Your destination for authentic veg and non-veg culinary masterpieces in Marol, Andheri East, Mumbai. Every step leads to exceptional taste.
+                                </p>
+                                <div class="flex space-x-2.5 pt-1">
+                                    <a href="https://instagram.com" target="_blank" class="w-7 h-7 rounded-full bg-walnutWood flex items-center justify-center text-creamBg hover:bg-coralPink transition-colors text-[10px]"><i class="fa-brands fa-instagram"></i></a>
+                                    <a href="https://facebook.com" target="_blank" class="w-7 h-7 rounded-full bg-walnutWood flex items-center justify-center text-creamBg hover:bg-coralPink transition-colors text-[10px]"><i class="fa-brands fa-facebook-f"></i></a>
+                                    <a href="https://wa.me/919820098200" target="_blank" class="w-7 h-7 rounded-full bg-walnutWood flex items-center justify-center text-creamBg hover:bg-coralPink transition-colors text-[10px]"><i class="fa-brands fa-whatsapp"></i></a>
+                                </div>
+                            </div>
+
+                            <!-- Col 2: Address & Timings -->
+                            <div class="space-y-2">
+                                <h4 class="heading-font text-sm font-bold text-white border-b border-lavenderPurple/30 pb-1">Location & Timings</h4>
+                                <p class="text-xs text-creamBg/90 flex items-start space-x-2">
+                                    <i class="fa-solid fa-location-dot text-coralPink mt-0.5 flex-shrink-0"></i>
+                                    <span>Shop No. 4, Marol Church Road, near Marol Metro Station, Andheri East, Mumbai - 400059</span>
+                                </p>
+                                <p class="text-xs text-creamBg/90 flex items-center space-x-2">
+                                    <i class="fa-solid fa-clock text-coralPink flex-shrink-0"></i>
+                                    <span>Monday – Sunday: 11:30 AM – 11:30 PM</span>
+                                </p>
+                                <p class="text-xs text-creamBg/90 flex items-center space-x-2">
+                                    <i class="fa-solid fa-phone text-coralPink flex-shrink-0"></i>
+                                    <span>+91 98200 98200 / 022 2850XXXX</span>
+                                </p>
+                            </div>
+
+                            <!-- Col 3: Quick Links -->
+                            <div class="space-y-2">
+                                <h4 class="heading-font text-sm font-bold text-white border-b border-lavenderPurple/30 pb-1">Quick Links</h4>
+                                <ul class="space-y-1 text-xs">
+                                    <li><a href="#story" class="hover:text-coralPink transition-colors">Our Brand Story</a></li>
+                                    <li><a href="#signature" class="hover:text-coralPink transition-colors">Signature Masterpieces</a></li>
+                                    <li><a href="#menu" class="hover:text-coralPink transition-colors">Full Interactive Menu</a></li>
+                                    <li><a href="#catering" class="hover:text-coralPink transition-colors">Party & Corporate Catering</a></li>
+                                    <li><a href="#reviews" class="hover:text-coralPink transition-colors">Guest Reviews</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- Col 4: Delivery Badges -->
+                            <div class="space-y-2">
+                                <h4 class="heading-font text-sm font-bold text-white border-b border-lavenderPurple/30 pb-1">Order Online</h4>
+                                <p class="text-xs text-creamBg/80">Available on major delivery platforms across Marol & Andheri East.</p>
+                                <div class="flex flex-col space-y-1.5 pt-1">
+                                    <div class="bg-walnutWood/80 px-3 py-1.5 rounded-xl border border-lavenderPurple/40 flex items-center justify-between">
+                                        <span class="text-xs font-bold text-white"><i class="fa-solid fa-utensils text-rose-400 mr-1.5"></i> Zomato Delivery</span>
+                                        <span class="text-[9px] bg-coralPink px-1.5 py-0.5 rounded text-white font-bold">4.7 ★</span>
+                                    </div>
+                                    <div class="bg-walnutWood/80 px-3 py-1.5 rounded-xl border border-lavenderPurple/40 flex items-center justify-between">
+                                        <span class="text-xs font-bold text-white"><i class="fa-solid fa-motorcycle text-amber-400 mr-1.5"></i> Swiggy Instafood</span>
+                                        <span class="text-[9px] bg-coralPink px-1.5 py-0.5 rounded text-white font-bold">4.8 ★</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="pt-5 border-t border-lavenderPurple/30 flex flex-col sm:flex-row items-center justify-between text-[11px] text-creamBg/70 text-center sm:text-left">
+                            <p>&copy; 2026 Foodch Paool (फूडचं पाऊल). All rights reserved. Crafted in Marol, Mumbai.</p>
+                            <p class="marathi-text mt-1.5 sm:mt-0 text-coralPink font-bold">चविष्ट जेवणाकडे तुमचं एक प्रेमळ पाऊल</p>
+                        </div>
+                    </div>
+                </footer>
+
+            </div>
+
+            <!-- Mobile Home Bar (Visible ONLY in Mobile Mockup mode) -->
+            <div id="phone-home-indicator" class="phone-home-indicator hidden">
+                <div class="home-bar"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Floating Tray / Cart Drawer Modal -->
+    <div id="cart-drawer-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden transition-opacity" onclick="toggleCartDrawer()"></div>
+    
+    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-creamBg text-tealGreen z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col justify-between border-l-4 border-lavenderPurple">
+        <!-- Drawer Header -->
+        <div class="p-4 bg-tealGreen text-white flex items-center justify-between shadow">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-basket-shopping text-coralPink text-base"></i>
+                <h3 class="heading-font text-base font-bold">Your Order Tray</h3>
+            </div>
+            <button onclick="toggleCartDrawer()" class="text-creamBg/80 hover:text-white p-1 text-base">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Cart Items List -->
+        <div id="cart-items-container" class="p-4 overflow-y-auto flex-1 space-y-3">
+            <div class="text-center py-12 text-stoneGrey text-xs">Your tray is currently empty. Add dishes from the menu!</div>
+        </div>
+
+        <!-- Drawer Footer with Total & WhatsApp CTA -->
+        <div class="p-4 bg-white border-t border-tealGreen/15 space-y-3">
+            <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                <span class="text-tealGreen">Subtotal:</span>
+                <span id="cart-total-price" class="text-coralPink text-base font-extrabold">₹0</span>
+            </div>
+            <button onclick="sendWhatsAppCartOrder()" class="w-full bg-coralPink hover:bg-coralPink/90 text-white py-3 rounded-xl font-bold text-xs shadow-lg flex items-center justify-center space-x-2 transition-transform active:scale-95">
+                <i class="fa-brands fa-whatsapp text-base"></i>
+                <span>Send Order on WhatsApp</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Full Menu Dataset
+        const menuData = [
+            { id: 1, name: "Murgh Malai Kebab", category: "kebabs", diet: "nonveg", price: 380, desc: "Juicy chicken marinated in cream, cheese and spices, cooked in tandoor.", image: "https://images.unsplash.com/photo-1599487484170-7c1e6e5fa81d?q=80&w=400&auto=format&fit=crop" },
+            { id: 2, name: "Paneer Tikka Pahadi", category: "kebabs", diet: "veg", price: 290, desc: "Cottage cheese marinated in fresh mint, coriander and spinach paste.", image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?q=80&w=400&auto=format&fit=crop" },
+            { id: 3, name: "Chicken Reshmi Kebab", category: "kebabs", diet: "nonveg", price: 370, desc: "Silken smooth minced chicken skewers grilled with mild aromatic herbs.", image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?q=80&w=400&auto=format&fit=crop" },
+            { id: 4, name: "Crispy Bombil Fry", category: "seafood", diet: "nonveg", price: 340, desc: "Fresh Bombay duck coated in Goan-Maharashtrian semolina spice crust.", image: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?q=80&w=400&auto=format&fit=crop" },
+            { id: 5, name: "Surmai Tawa Fry", category: "seafood", diet: "nonveg", price: 490, desc: "Kingfish steak marinated in coastal Malvani red masala and pan-fried.", image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=400&auto=format&fit=crop" },
+            { id: 6, name: "Classic Butter Chicken", category: "mughlai", diet: "nonveg", price: 390, desc: "Tandoori chicken in velvety tomato butter gravy with kasuri methi.", image: "https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?q=80&w=400&auto=format&fit=crop" },
+            { id: 7, name: "Paneer Lababdar", category: "mughlai", diet: "veg", price: 320, desc: "Cottage cheese in rich onion tomato gravy with capsicum and spices.", image: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=400&auto=format&fit=crop" },
+            { id: 8, name: "Paool Special Dum Biryani", category: "mughlai", diet: "nonveg", price: 340, desc: "Fragrant basmati rice layered with tender meat, saffron and herbs.", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=80&w=400&auto=format&fit=crop" },
+            { id: 9, name: "Veg Hyderabadi Biryani", category: "mughlai", diet: "veg", price: 280, desc: "Assorted vegetables and basmati rice cooked with fried onions and mint.", image: "https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?q=80&w=400&auto=format&fit=crop" },
+            { id: 10, name: "Tandoori Butter Roti", category: "breads", diet: "veg", price: 45, desc: "Whole wheat bread baked in clay oven brushed with butter.", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=400&auto=format&fit=crop" },
+            { id: 11, name: "Garlic Naan", category: "breads", diet: "veg", price: 75, desc: "Refined flour flatbread topped with freshly minced garlic and cilantro.", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=400&auto=format&fit=crop" },
+            { id: 12, name: "Paneer Chilli Dry", category: "starters", diet: "veg", price: 290, desc: "Batter-fried paneer cubes tossed with bell peppers, soy and green chillies.", image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?q=80&w=400&auto=format&fit=crop" },
+            { id: 13, name: "Chicken 65", category: "starters", diet: "nonveg", price: 310, desc: "Spicy, deep-fried chicken chunks flavored with curry leaves and mustard.", image: "https://images.unsplash.com/photo-1610057099431-d7a8e9d3d4fb?q=80&w=400&auto=format&fit=crop" },
+            { id: 14, name: "Sizzling Brownie with Ice Cream", category: "desserts", diet: "veg", price: 220, desc: "Warm chocolate walnut brownie served on hot sizzler plate with vanilla scoop.", image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=400&auto=format&fit=crop" },
+            { id: 15, name: "Shahi Tukda", category: "desserts", diet: "veg", price: 180, desc: "Fried bread slices soaked in saffron sugar syrup topped with rich rabri.", image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=400&auto=format&fit=crop" }
+        ];
+
+        let currentDiet = 'all';
+        let currentCategory = 'starters';
+        let searchQuery = '';
+        let cart = {};
+
+        // Loader Screen Timeout
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader-screen');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 600);
+            }, 1000);
+        });
+
+        // Mobile Menu Navigation Toggle
+        function toggleMobileMenu() {
+            const dropdown = document.getElementById('mobile-dropdown');
+            const icon = document.getElementById('mobile-menu-icon');
+            dropdown.classList.toggle('hidden');
+            if(dropdown.classList.contains('hidden')) {
+                icon.className = "fa-solid fa-bars text-xl";
+            } else {
+                icon.className = "fa-solid fa-xmark text-xl";
+            }
+        }
+
+        // View Mode Switcher (Desktop View vs Mobile Mockup View)
+        function switchView(mode) {
+            const displayContainer = document.getElementById('display-mode-container');
+            const phoneShellWrapper = document.getElementById('phone-shell-wrapper');
+            const phoneNotchBar = document.getElementById('phone-notch-bar');
+            const phoneHomeIndicator = document.getElementById('phone-home-indicator');
+            const mainViewportWrapper = document.getElementById('main-viewport-wrapper');
+
+            const btnDesk = document.getElementById('btn-desktop');
+            const btnMob = document.getElementById('btn-mobile');
+
+            if (mode === 'mobile') {
+                // Apply Mockup styling & add mobile-mockup class to body
+                document.body.classList.add('is-mobile-mockup');
+                displayContainer.className = "mockup-container-outer";
+                phoneShellWrapper.className = "phone-shell";
+                mainViewportWrapper.className = "phone-screen-content";
+
+                phoneNotchBar.classList.remove('hidden');
+                phoneHomeIndicator.classList.remove('hidden');
+
+                btnMob.className = "px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-coralPink text-white shadow";
+                btnDesk.className = "px-3.5 py-1.5 rounded-full text-xs font-bold transition-all text-creamBg hover:text-white";
+            } else {
+                // Revert to standard responsive Desktop layout
+                document.body.classList.remove('is-mobile-mockup');
+                displayContainer.className = "w-full";
+                phoneShellWrapper.className = "w-full";
+                mainViewportWrapper.className = "w-full";
+
+                phoneNotchBar.classList.add('hidden');
+                phoneHomeIndicator.classList.add('hidden');
+
+                btnDesk.className = "px-3.5 py-1.5 rounded-full text-xs font-bold transition-all bg-coralPink text-white shadow";
+                btnMob.className = "px-3.5 py-1.5 rounded-full text-xs font-bold transition-all text-creamBg hover:text-white";
+            }
+        }
+
+        // Menu Search & Filter Logic
+        function renderMenu() {
+            const grid = document.getElementById('menu-grid');
+            grid.innerHTML = '';
+
+            const filtered = menuData.filter(item => {
+                const matchDiet = (currentDiet === 'all') || (currentDiet === 'veg' && item.diet === 'veg') || (currentDiet === 'nonveg' && item.diet === 'nonveg');
+                const matchCat = (searchQuery.trim() !== '') ? true : (item.category === currentCategory);
+                const matchSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || item.desc.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchDiet && matchCat && matchSearch;
+            });
+
+            if(filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-stoneGrey text-sm">No dishes found matching your search criteria.</div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const dietBadge = item.diet === 'veg' 
+                    ? '<span class="bg-emerald-700 text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow">Pure Veg</span>' 
+                    : '<span class="bg-rose-700 text-white text-[9px] font-bold px-2 py-0.5 rounded-full shadow">Non-Veg</span>';
+
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-4 shadow-md border border-tealGreen/15 flex flex-col justify-between transform hover:-translate-y-1 transition-all duration-300";
+                card.innerHTML = `
+                    <div>
+                        <div class="relative h-40 rounded-xl overflow-hidden mb-3">
+                            <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x300/1F514E/F6F0E5?text=Foodch+Paool'">
+                            <div class="absolute top-2.5 left-2.5">${dietBadge}</div>
+                            <div class="absolute bottom-2.5 right-2.5 bg-tealGreen text-creamBg text-xs font-bold px-2.5 py-1 rounded-lg shadow">₹${item.price}</div>
+                        </div>
+                        <h4 class="heading-font text-base sm:text-lg font-bold text-tealGreen">${item.name}</h4>
+                        <p class="text-stoneGrey text-xs mt-1 leading-relaxed">${item.desc}</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-tealGreen/10 flex items-center justify-between">
+                        <span class="text-[9px] sm:text-[10px] text-lavenderPurple font-bold uppercase tracking-wider bg-lavenderPurple/10 px-2 py-0.5 rounded">${item.category}</span>
+                        <button onclick="addToCart(${item.id})" class="bg-coralPink hover:bg-coralPink/90 text-white text-xs px-3.5 py-1.5 rounded-xl font-bold shadow transition-transform transform active:scale-95">
+                            Add +
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function handleSearchInput(e) {
+            searchQuery = e.target.value;
+            renderMenu();
+        }
+
+        function filterDiet(diet) {
+            currentDiet = diet;
+            ['all', 'veg', 'nonveg'].forEach(d => {
+                const btn = document.getElementById(`filter-${d}`);
+                if(d === diet) {
+                    btn.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-tealGreen text-creamBg shadow";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-xl text-xs font-bold transition-all text-stoneGrey hover:text-tealGreen";
+                }
+            });
+            renderMenu();
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+            searchQuery = '';
+            document.getElementById('menu-search-input').value = '';
+            
+            ['starters', 'kebabs', 'mughlai', 'seafood', 'breads', 'desserts'].forEach(c => {
+                const btn = document.getElementById(`cat-${c}`);
+                if(c === cat) {
+                    btn.className = "menu-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-lavenderPurple text-white shadow";
+                } else {
+                    btn.className = "menu-cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-creamBg text-tealGreen hover:bg-tealGreen/10";
+                }
+            });
+            renderMenu();
+        }
+
+        // Cart & Tray Drawer Logic
+        function addToCart(itemId) {
+            if(cart[itemId]) {
+                cart[itemId]++;
+            } else {
+                cart[itemId] = 1;
+            }
+            updateCartUI();
+        }
+
+        function removeFromCart(itemId) {
+            if(cart[itemId]) {
+                cart[itemId]--;
+                if(cart[itemId] <= 0) {
+                    delete cart[itemId];
+                }
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge-count');
+            const container = document.getElementById('cart-items-container');
+            const totalPriceLabel = document.getElementById('cart-total-price');
+
+            let totalItems = 0;
+            let totalPrice = 0;
+            container.innerHTML = '';
+
+            const keys = Object.keys(cart);
+            if(keys.length === 0) {
+                badge.classList.add('hidden');
+                container.innerHTML = `<div class="text-center py-12 text-stoneGrey text-xs">Your tray is currently empty. Add dishes from the menu!</div>`;
+                totalPriceLabel.innerText = "₹0";
+                return;
+            }
+
+            keys.forEach(id => {
+                const item = menuData.find(m => m.id == id);
+                if(item) {
+                    const qty = cart[id];
+                    totalItems += qty;
+                    const itemSubtotal = item.price * qty;
+                    totalPrice += itemSubtotal;
+
+                    const row = document.createElement('div');
+                    row.className = "bg-white p-3 rounded-2xl border border-tealGreen/10 shadow-sm flex items-center justify-between";
+                    row.innerHTML = `
+                        <div class="truncate pr-2">
+                            <h5 class="font-bold text-tealGreen text-xs truncate">${item.name}</h5>
+                            <p class="text-[10px] text-stoneGrey">₹${item.price} x ${qty}</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-bold text-coralPink mr-1">₹${itemSubtotal}</span>
+                            <div class="flex items-center bg-creamBg border border-tealGreen/20 rounded-lg p-0.5 space-x-1">
+                                <button onclick="removeFromCart(${item.id})" class="w-5 h-5 bg-white text-tealGreen font-bold text-xs rounded hover:bg-tealGreen hover:text-white">-</button>
+                                <span class="text-xs font-bold px-1">${qty}</span>
+                                <button onclick="addToCart(${item.id})" class="w-5 h-5 bg-white text-tealGreen font-bold text-xs rounded hover:bg-tealGreen hover:text-white">+</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(row);
+                }
+            });
+
+            badge.innerText = totalItems;
+            badge.classList.remove('hidden');
+            totalPriceLabel.innerText = `₹${totalPrice}`;
+        }
+
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cart-drawer');
+            const overlay = document.getElementById('cart-drawer-overlay');
+            drawer.classList.toggle('translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        function sendWhatsAppCartOrder() {
+            const keys = Object.keys(cart);
+            if(keys.length === 0) {
+                alert("Your tray is empty! Please add dishes from the menu first.");
+                return;
+            }
+
+            let message = "Hi Foodch Paool (फूडचं पाऊल), I would like to place an order:\n\n";
+            let total = 0;
+            keys.forEach(id => {
+                const item = menuData.find(m => m.id == id);
+                if(item) {
+                    const qty = cart[id];
+                    const subtotal = item.price * qty;
+                    total += subtotal;
+                    message += `• ${item.name} (x${qty}) - ₹${subtotal}\n`;
+                }
+            });
+            message += `\nTotal Amount: ₹${total}\nAddress/Delivery in Marol: `;
+
+            const whatsappUrl = `https://wa.me/919820098200?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Interactive Catering Estimator
+        function updateCateringEstimate(guests) {
+            document.getElementById('guest-count-label').innerText = `${guests} Guests`;
+            const pricePerHead = guests > 100 ? 320 : 350;
+            const totalEst = (guests * pricePerHead).toLocaleString('en-IN');
+            document.getElementById('estimated-cost-label').innerHTML = `₹${totalEst} <span class="text-[10px] font-normal text-creamBg/70">(~₹${pricePerHead}/head)</span>`;
+        }
+
+        function handleCateringSubmit(e) {
+            e.preventDefault();
+            alert("Thank you for your catering inquiry! Our manager at Marol, Andheri East will connect with you within 2 hours.");
+            e.target.reset();
+        }
+
+        // Initialize menu render on load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMenu();
+        });
+    </script>
+</body>
+</html>
